@@ -483,3 +483,6 @@ $RECYCLE.BIN/
 
 # Aspire CLI local state
 .aspire/
+
+# Claude Code personal settings (the shared .claude/settings.json stays tracked)
+.claude/settings.local.json
