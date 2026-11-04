@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\DocAgent.Core\DocAgent.Core.csproj" />
+    <ProjectReference Include="..\..\src\DocAgent.Fakes\DocAgent.Fakes.csproj" />
+    <ProjectReference Include="..\..\src\DocAgent.Profiling\DocAgent.Profiling.csproj" />
+    <ProjectReference Include="..\..\src\DocAgent.Agents\DocAgent.Agents.csproj" />
+    <ProjectReference Include="..\..\src\DocAgent.Knowledge\DocAgent.Knowledge.csproj" />
+    <ProjectReference Include="..\..\src\DocAgent.Safety\DocAgent.Safety.csproj" />
+  </ItemGroup>
+
+</Project>

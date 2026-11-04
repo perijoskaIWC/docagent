@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\DocAgent.Core\DocAgent.Core.csproj" />
+    <ProjectReference Include="..\..\src\DocAgent.Fakes\DocAgent.Fakes.csproj" />
+    <ProjectReference Include="..\..\src\DocAgent.Profiling\DocAgent.Profiling.csproj" />
+    <ProjectReference Include="..\..\src\DocAgent.Agents\DocAgent.Agents.csproj" />
+    <ProjectReference Include="..\..\src\DocAgent.Knowledge\DocAgent.Knowledge.csproj" />
+    <ProjectReference Include="..\..\src\DocAgent.Safety\DocAgent.Safety.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+</Project>

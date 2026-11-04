@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <ItemGroup>
+    <ProjectReference Include="..\DocAgent.Core\DocAgent.Core.csproj" />
+    <ProjectReference Include="..\DocAgent.Fakes\DocAgent.Fakes.csproj" />
+    <ProjectReference Include="..\DocAgent.Profiling\DocAgent.Profiling.csproj" />
+    <ProjectReference Include="..\DocAgent.Agents\DocAgent.Agents.csproj" />
+    <ProjectReference Include="..\DocAgent.Knowledge\DocAgent.Knowledge.csproj" />
+    <ProjectReference Include="..\DocAgent.Safety\DocAgent.Safety.csproj" />
+    <ProjectReference Include="..\DocAgent.Infrastructure\DocAgent.Infrastructure.csproj" />
+    <ProjectReference Include="..\DocAgent.ServiceDefaults\DocAgent.ServiceDefaults.csproj" />
+  </ItemGroup>
+
+</Project>
