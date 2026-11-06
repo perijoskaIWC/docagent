@@ -4,4 +4,15 @@
     <ProjectReference Include="..\DocAgent.Core\DocAgent.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <!-- Pins EF Core to the Design version for every project that uses Infrastructure. Without it, Design (private)
+         compiles this project against a newer EF Core than Npgsql's minimum, and consumers get both versions. -->
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
+  </ItemGroup>
+
 </Project>

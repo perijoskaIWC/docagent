@@ -23,6 +23,7 @@
     <ProjectReference Include="..\..\src\DocAgent.Agents\DocAgent.Agents.csproj" />
     <ProjectReference Include="..\..\src\DocAgent.Knowledge\DocAgent.Knowledge.csproj" />
     <ProjectReference Include="..\..\src\DocAgent.Safety\DocAgent.Safety.csproj" />
+    <ProjectReference Include="..\..\src\DocAgent.Infrastructure\DocAgent.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

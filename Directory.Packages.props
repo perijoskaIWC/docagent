@@ -3,11 +3,12 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
-    <!-- All package versions live here; csproj files reference packages without Version. -->
+    <!-- All package versions live here; csproj files reference packages without Version.
+         `dotnet add package` sorts new entries into the top of this list: move them under the right heading. -->
 
-    <!-- DI and configuration abstractions: fakes and the owners' entry points -->
-    <PackageVersion Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.14" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.14" />
+    <!-- Aspire hosting (AppHost). Keep in step with the Aspire.AppHost.Sdk version. -->
+    <PackageVersion Include="Aspire.Hosting.Azure.PostgreSQL" Version="13.6.4" />
+    <PackageVersion Include="Aspire.Hosting.JavaScript" Version="13.6.4" />
 
     <!-- Aspire ServiceDefaults -->
     <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="10.10.0" />
@@ -17,6 +18,17 @@
     <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.17.0" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.17.0" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="1.17.0" />
+
+    <!-- Persistence: EF Core + PostgreSQL (Infrastructure, Api) -->
+    <PackageVersion Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" Version="13.6.4" />
+    <!-- Keep Design and Relational on the same version. -->
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.14" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.14" />
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
+
+    <!-- DI and configuration abstractions: fakes and the owners' entry points -->
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.14" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.14" />
 
     <!-- Tests -->
     <PackageVersion Include="coverlet.collector" Version="6.0.4" />
