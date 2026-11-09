@@ -1,6 +1,6 @@
-using DocAgent.Agents.Rendering;
 using DocAgent.Core;
 using DocAgent.Fakes;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DocAgent.UnitTests;
@@ -32,26 +32,18 @@ internal static class TestData
         return new AuthoringContext(request, template, model, detection);
     }
 
-    /// <summary>The fake registrations from guide 1 §4.1 with every Features:Fakes flag on.</summary>
-    public static ServiceProvider FakeServices(Action<IServiceCollection>? configure = null)
+    /// <summary>
+    /// The API's own registrations (guide 1 §4.1). With no configuration every Features:Fakes flag defaults to true,
+    /// so this is the all-fakes setup, and a change to the API's wiring is tested here too.
+    /// </summary>
+    public static ServiceProvider FakeServices(Action<IServiceCollection>? configure = null) =>
+        Services(new Dictionary<string, string?>(), configure);
+
+    /// <summary>The API's registrations with the given configuration, e.g. { ["Features:Fakes:Chat"] = "false" }.</summary>
+    public static ServiceProvider Services(IDictionary<string, string?> settings, Action<IServiceCollection>? configure = null)
     {
-        var s = new ServiceCollection();
-        s.AddSingleton<IContentScreen, FakeContentScreen>();
-        s.AddSingleton<IExportProfiler, FakeExportProfiler>();
-        s.AddSingleton<IDesignPartValidator, FakeDesignPartValidator>();
-        s.AddSingleton<ITemplateProvider, FakeTemplateProvider>();
-        s.AddKeyedSingleton<ISystemDetector>(KeyedService.AnyKey, (_, key) => new FakeSystemDetector((string)key!));
-        s.AddFakeStrategyOptions("detector", "rules", "rag", "hybrid");
-        s.AddSingleton<IDocumentTextExtractor, FakeDocumentTextExtractor>();
-        s.AddSingleton<IKnowledgeRetriever, FakeKnowledgeRetriever>();
-        s.AddSingleton<IKnowledgeIngestor, FakeKnowledgeIngestor>();
-        s.AddKeyedSingleton<ISectionContextProvider>(KeyedService.AnyKey, (_, key) => new FakeSectionContextProvider((string)key!));
-        s.AddFakeStrategyOptions("retrieval", "none", "prestep", "tool");
-        s.AddKeyedSingleton<IDesignAuthor>(KeyedService.AnyKey, (_, key) => new FakeDesignAuthor((string)key!));
-        s.AddFakeStrategyOptions("author", "single-agent", "specialists", "concurrent");
-        s.AddSingleton<IRunPipeline, FakeRunPipeline>();
-        s.AddSingleton<IRunChat, FakeRunChat>();
-        s.AddSingleton<IDesignRenderer, MarkdownDesignRenderer>();
+        var configuration = new ConfigurationBuilder().AddInMemoryCollection(settings).Build();
+        var s = new ServiceCollection().AddDocAgentServices(configuration);
         configure?.Invoke(s);
         return s.BuildServiceProvider(new ServiceProviderOptions { ValidateOnBuild = true, ValidateScopes = true });
     }

@@ -38,4 +38,14 @@ public class ExportPackMappingTests
                 Assert.Equal(new byte[] { 1, 2, 3 }, excel.Bytes);
             });
     }
+
+    [Fact]
+    public void The_byte_order_mark_is_not_part_of_the_text()
+    {
+        // Excel's "CSV UTF-8" export starts with EF BB BF. Left in, the first header would be "﻿sku".
+        byte[] csv = [0xEF, 0xBB, 0xBF, .. "sku,name\n"u8];
+
+        Assert.Equal("sku,name\n", ExportPackMapping.DecodeText(csv));
+        Assert.Equal("sku,name\n", ExportPackMapping.DecodeText("sku,name\n"u8.ToArray()));
+    }
 }

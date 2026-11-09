@@ -1,0 +1,148 @@
+# DocAgent API: one request for every endpoint (guide 1 §4.4).
+# Start the AppHost first, then run the requests from top to bottom: later requests use the ids of earlier ones.
+# VS Code: the REST Client extension ("Send Request" above each request). Visual Studio: built in.
+#
+# The upload carries a tiny synthetic pack inline. When Darko's packs are in samples/, upload one of those instead:
+#   < ../../samples/<system>/<variant>/<file>   (paths are relative to this file)
+
+@api = https://localhost:7133
+
+### What can a run be made of? The templates...
+GET {{api}}/api/templates
+
+### ...and the strategies, grouped by slot (all fakes for now)
+GET {{api}}/api/strategies
+
+### Create a run with explicit strategy keys. Answers 202 with the run id.
+# @name createRun
+POST {{api}}/api/runs
+Content-Type: multipart/form-data; boundary=DocAgentPack
+
+--DocAgentPack
+Content-Disposition: form-data; name="templateId"
+
+system-assessment
+--DocAgentPack
+Content-Disposition: form-data; name="detector"
+
+rules
+--DocAgentPack
+Content-Disposition: form-data; name="author"
+
+single-agent
+--DocAgentPack
+Content-Disposition: form-data; name="retrieval"
+
+tool
+--DocAgentPack
+Content-Disposition: form-data; name="brief"
+
+Describe the field service system before we integrate it.
+--DocAgentPack
+Content-Disposition: form-data; name="files"; filename="data/work_orders.csv"
+Content-Type: text/csv
+
+id,technician_id,customer_id,status,opened_at
+WO-1001,T-07,C-311,open,2026-10-01
+WO-1002,T-09,C-118,closed,2026-10-02
+--DocAgentPack
+Content-Disposition: form-data; name="files"; filename="openapi.yaml"
+Content-Type: application/yaml
+
+openapi: 3.0.3
+info:
+  title: Helio Service API
+  version: "2.4"
+paths:
+  /work-orders:
+    get:
+      summary: List work orders
+--DocAgentPack--
+
+### Poll the run: send this again until status is Completed (about 3 seconds with the fakes)
+GET {{api}}/api/runs/{{createRun.response.body.$.runId}}
+
+### Or watch the progress as Server-Sent Events (REST Client shows them when the stream ends)
+GET {{api}}/api/runs/{{createRun.response.body.$.runId}}/events
+
+### The SystemModel behind the design
+GET {{api}}/api/runs/{{createRun.response.body.$.runId}}/model
+
+### The design as a Markdown download
+GET {{api}}/api/runs/{{createRun.response.body.$.runId}}/design.md
+
+### Rerun on the same files with another author. Fields left out keep the source run's values.
+# @name rerun
+POST {{api}}/api/runs/{{createRun.response.body.$.runId}}/rerun
+Content-Type: application/json
+
+{ "author": "specialists" }
+
+### The rerun: sourceRunId points back at the first run
+GET {{api}}/api/runs/{{rerun.response.body.$.runId}}
+
+### The latest runs, filtered by author
+GET {{api}}/api/runs?author=specialists
+
+### Feedback on one section: 1 is good, -1 is bad. Answers 204.
+POST {{api}}/api/runs/{{createRun.response.body.$.runId}}/feedback
+Content-Type: application/json
+
+{ "rating": 1, "sectionId": "data-model", "comment": "Clear and complete." }
+
+### Ask about the run. The answer streams as Server-Sent Events; the conversation id is in the X-Conversation-Id header.
+# @name ask
+POST {{api}}/api/ask
+Content-Type: application/json
+
+{ "runId": "{{createRun.response.body.$.runId}}", "question": "Which entities did you find?" }
+
+### A follow-up in the same conversation: the first question and answer are now its history
+POST {{api}}/api/ask
+Content-Type: application/json
+
+{ "runId": "{{createRun.response.body.$.runId}}", "conversationId": "{{ask.response.headers.X-Conversation-Id}}", "question": "Which of them are risky?" }
+
+### Add a knowledge document (our own words, so licence "internal"). Answers 202.
+POST {{api}}/api/knowledge
+Content-Type: multipart/form-data; boundary=DocAgentKnowledge
+
+--DocAgentKnowledge
+Content-Disposition: form-data; name="kind"
+
+Pattern
+--DocAgentKnowledge
+Content-Disposition: form-data; name="license"
+
+internal
+--DocAgentKnowledge
+Content-Disposition: form-data; name="files"; filename="outbox-pattern.md"
+Content-Type: text/markdown
+
+# Outbox pattern
+
+Write the change and the event to publish in one database transaction, then publish from the outbox table.
+--DocAgentKnowledge--
+
+### Search the knowledge base (debug)
+GET {{api}}/api/knowledge/search?q=file feed&kind=Pattern&top=3
+
+### A bad request on purpose: unknown template and strategy. Answers 400 with the problems per field.
+POST {{api}}/api/runs
+Content-Type: multipart/form-data; boundary=DocAgentPack
+
+--DocAgentPack
+Content-Disposition: form-data; name="templateId"
+
+no-such-template
+--DocAgentPack
+Content-Disposition: form-data; name="author"
+
+magentic
+--DocAgentPack
+Content-Disposition: form-data; name="files"; filename="a.csv"
+Content-Type: text/csv
+
+id
+1
+--DocAgentPack--

@@ -1,5 +1,4 @@
 using DocAgent.Core;
-using DocAgent.Infrastructure.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -25,13 +24,13 @@ internal sealed class EfRunReader(IServiceScopeFactory scopes) : IRunReader
 
         return new DesignResult(
             run.Id,
-            new RunStrategy(run.Detector, run.Author, run.Retrieval, run.Lessons, run.MaxReviewLoops),
+            RunMapping.ToStrategy(run),
             DocAgentJson.Deserialize<ScreeningResult>(result.ScreeningJson),
             DocAgentJson.Deserialize<SystemModel>(result.ModelJson),
             DocAgentJson.Deserialize<SystemDetection>(result.DetectionJson),
             DocAgentJson.Deserialize<SolutionDesign>(result.DesignJson),
-            [.. run.Reviews.OrderBy(r => r.Iteration).Select(ToReviewResult)],
-            new RunUsage(run.InputTokens, run.OutputTokens, run.ModelCalls, run.ToolCalls, run.EstimatedCostUsd));
+            [.. run.Reviews.OrderBy(r => r.Iteration).Select(RunMapping.ToReviewResult)],
+            RunMapping.ToUsage(run));
     }
 
     public async Task<ExportPack?> GetPackAsync(Guid runId, CancellationToken ct = default)
@@ -44,10 +43,4 @@ internal sealed class EfRunReader(IServiceScopeFactory scopes) : IRunReader
             .FirstOrDefaultAsync(r => r.Id == runId, ct);
         return run is null ? null : ExportPackMapping.ToExportPack(run);
     }
-
-    private static ReviewResult ToReviewResult(RunReview review) =>
-        new(review.Iteration, review.Approved, review.Score,
-            DocAgentJson.Deserialize<List<ReviewIssue>>(review.IssuesJson),
-            DocAgentJson.Deserialize<List<CheckResult>>(review.ChecksJson),
-            review.Summary);
 }

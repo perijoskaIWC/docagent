@@ -26,6 +26,9 @@
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.14" />
     <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
 
+    <!-- API: OpenAPI document (/openapi/v1.json in Development) -->
+    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.14" />
+
     <!-- DI and configuration abstractions: fakes and the owners' entry points -->
     <PackageVersion Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.14" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.14" />
