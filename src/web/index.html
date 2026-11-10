@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DocAgent</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script>
+      // If the app fails before it can draw anything, show the error instead of a white page.
+      window.addEventListener('error', function (event) {
+        var root = document.getElementById('root')
+        if (root && !root.hasChildNodes()) root.textContent = 'DocAgent failed to start: ' + event.message
+      })
+    </script>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

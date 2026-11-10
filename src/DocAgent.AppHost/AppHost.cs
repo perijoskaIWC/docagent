@@ -17,9 +17,9 @@ var api = builder.AddProject<Projects.DocAgent_Api>("api")
                  .WithEnvironment("Search__Endpoint", searchEndpoint)
                  .WithExternalHttpEndpoints();
 
-// The web app arrives in Phase 5 (src/web). Uncomment then.
-// builder.AddViteApp("web", "../web")
-//        .WithReference(api).WaitFor(api)
-//        .WithExternalHttpEndpoints();
+// The React app (src/web). Vite's dev server proxies /api to the api resource, whose address Aspire injects.
+builder.AddViteApp("web", "../web")
+       .WithReference(api).WaitFor(api)
+       .WithExternalHttpEndpoints();
 
 builder.Build().Run();

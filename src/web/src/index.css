@@ -1,0 +1,4 @@
+/* Fluent UI styles the components; only the page itself needs resetting. */
+body {
+  margin: 0;
+}
