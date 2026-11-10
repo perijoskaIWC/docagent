@@ -5,6 +5,9 @@ solution design, and it is a lab for comparing agent strategies with numbers. Th
 per team member are in [docs/guides/](docs/guides/). Start with
 [00-team-overview.md](docs/guides/00-team-overview.md).
 
+**New to the project?** Follow [docs/onboarding.md](docs/onboarding.md): from clone to your own fake flag turned off,
+with fixes for the usual problems.
+
 ## Prerequisites
 
 | Tool | Check |
