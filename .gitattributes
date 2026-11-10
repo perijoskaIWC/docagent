@@ -1,0 +1,15 @@
+# Line endings: LF in the repository and in every working copy, on every OS. Without this file, each developer's
+# core.autocrlf setting decides, and diffs fill up with changes that are only line endings.
+* text=auto eol=lf
+
+# Windows batch files need CRLF.
+*.cmd text eol=crlf
+*.bat text eol=crlf
+
+# Binary files: never converted, never diffed as text.
+*.png binary
+*.jpg binary
+*.ico binary
+*.pdf binary
+*.xlsx binary
+*.zip binary

@@ -1,0 +1,4 @@
+# Who must approve changes to which paths (guide 1 §6.2). GitHub asks these people for a review automatically.
+# The contracts are shared by the whole team: Darko approves every change to them (team overview §6.4).
+# TODO: replace the placeholder with Darko's GitHub username, e.g. @darko-example. Until then GitHub ignores this line.
+src/DocAgent.Core/** @darko-github-username
